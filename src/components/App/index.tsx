@@ -6,6 +6,8 @@ import defaultTheme from '../../assets/styles/themes/default';
 
 import Routes from '../../routes';
 
+import Drawer from '../Drawer';
+
 import { Container } from './styles';
 
 function App() {
@@ -14,6 +16,8 @@ function App() {
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles />
         <Container>
+          <Drawer />
+
           <Routes />
         </Container>
       </ThemeProvider>
