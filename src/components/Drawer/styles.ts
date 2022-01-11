@@ -42,6 +42,7 @@ export const ItemContainer = styled.div`
 
   background: ${({ theme }) => theme.colors.purple};
   border-radius: 12px;
+  cursor: pointer;
 
   h2 {
     font-size: 1.25rem;
