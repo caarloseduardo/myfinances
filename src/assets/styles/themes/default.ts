@@ -7,6 +7,8 @@ export default {
     },
     semantic: {
       green: '#00B900',
+      red: '#D73D28',
+      yellow: '#FDA218',
     },
   },
 };

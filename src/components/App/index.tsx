@@ -8,7 +8,7 @@ import Routes from '../../routes';
 
 import Drawer from '../Drawer';
 
-import { Container } from './styles';
+import { Container, Content } from './styles';
 
 function App() {
   return (
@@ -18,7 +18,9 @@ function App() {
         <Container>
           <Drawer />
 
-          <Routes />
+          <Content>
+            <Routes />
+          </Content>
         </Container>
       </ThemeProvider>
     </BrowserRouter>
