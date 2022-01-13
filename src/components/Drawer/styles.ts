@@ -40,7 +40,7 @@ export const ItemContainer = styled.div`
   align-items: center;
   gap: 22px;
 
-  background: ${({ theme }) => theme.colors.purple};
+  background: ${({ theme }) => theme.colors.secondary.main};
   border-radius: 12px;
   cursor: pointer;
 

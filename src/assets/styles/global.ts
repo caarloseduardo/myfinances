@@ -16,5 +16,6 @@ export default createGlobalStyle`
 
   button {
     cursor: pointer;
+    border: none;
   }
 `;
