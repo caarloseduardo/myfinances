@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   FiChevronLeft, FiChevronRight, FiTrendingUp, FiTrendingDown,
 } from 'react-icons/fi';
