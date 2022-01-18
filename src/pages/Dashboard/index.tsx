@@ -6,6 +6,9 @@ import { AiOutlineArrowUp, AiOutlineArrowDown, AiOutlinePlus } from 'react-icons
 import { BiTrashAlt } from 'react-icons/bi';
 import { HiOutlinePencilAlt } from 'react-icons/hi';
 
+import formatNumberToCurrency from '../../utils/formatNumberToCurrency';
+import formatDate from '../../utils/formatDate';
+
 import {
   Container, KpisContainer, KpiContainer, Table,
 } from './styles';
@@ -15,7 +18,14 @@ import defaultTheme from '../../assets/styles/themes/default';
 import TransactionsService from '../../services/TransactionsService';
 
 const Dashboard: React.FC = () => {
-  const [transactions, setTransactions] = useState([]);
+  interface transactionType {
+    amount: number;
+    date: string;
+    description: string;
+    id: string;
+  }
+
+  const [transactions, setTransactions] = useState<transactionType[]>([]);
 
   const loadTransactions = useCallback(async () => {
     try {
@@ -29,7 +39,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     loadTransactions();
-  }, [loadTransactions]);
+  }, []);
 
   return (
     <Container>
@@ -42,7 +52,15 @@ const Dashboard: React.FC = () => {
           <span className="label-container">Renda</span>
 
           <div className="amount-container">
-            <h1>R$ 5.000,00</h1>
+            <h1>
+              R$
+              {' '}
+              {transactions.map((transaction) => (
+                transaction.amount > 0 ? transaction.amount : 0
+              ))
+                .reduce((acc, current) => acc + current, 0)}
+
+            </h1>
             <FiTrendingUp
               size={24}
               color={defaultTheme.colors.semantic.green}
@@ -58,7 +76,15 @@ const Dashboard: React.FC = () => {
           <span className="label-container">Contas</span>
 
           <div className="amount-container">
-            <h1>R$ 300,00</h1>
+            <h1>
+              R$
+              {' '}
+              {transactions.map((transaction) => (
+                transaction.amount < 0 ? transaction.amount : 0
+              ))
+                .reduce((acc, current) => acc + current, 0)}
+
+            </h1>
             <FiTrendingDown
               size={24}
               color={defaultTheme.colors.semantic.red}
@@ -71,10 +97,16 @@ const Dashboard: React.FC = () => {
             <AiOutlineArrowUp size={20} />
           </div>
 
-          <span className="label-container">Saldo restante</span>
+          <span className="label-container">Saldo total</span>
 
           <div className="amount-container">
-            <h1>R$ 4.700,00</h1>
+            <h1>
+              R$
+              {' '}
+              {transactions.map((transaction) => transaction.amount)
+                .reduce((acc, current) => acc + current, 0)}
+
+            </h1>
             <FiTrendingUp
               size={24}
               color={defaultTheme.colors.semantic.yellow}
@@ -108,23 +140,25 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className="table-body">
-          {transactions.map((transaction: any) => (
+          {transactions.map((transaction: transactionType) => (
             <div className="row" key={transaction.id}>
               <div className="columns">
                 <div className="column1">
                   <AiOutlineArrowDown
                     size={18}
-                    color={defaultTheme.colors.semantic.red}
+                    color={defaultTheme.colors.semantic[transaction.amount < 0 ? 'red' : 'green']}
                   />
                 </div>
                 <div className="column2">
-                  <span>Conta de água</span>
+                  <span>{transaction.description}</span>
                 </div>
                 <div className="column3">
-                  <span className="amount red">- R$ 300,00</span>
+                  <span className="amount red">
+                    {formatNumberToCurrency(transaction.amount)}
+                  </span>
                 </div>
                 <div className="column4">
-                  <span>17 Dez, 2021</span>
+                  <span>{formatDate(transaction.date)}</span>
                 </div>
                 <div className="column5">
                   <HiOutlinePencilAlt

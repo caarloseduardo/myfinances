@@ -24,6 +24,7 @@
     "import/prefer-default-export": "off",
     "import/extensions": "off",
     "import/no-unresolved": "off",
+    "consistent-return": "off",
     "class-methods-use-this": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": "off",
