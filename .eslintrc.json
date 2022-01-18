@@ -20,9 +20,11 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "no-promise-executor-return": "off",
     "import/prefer-default-export": "off",
     "import/extensions": "off",
     "import/no-unresolved": "off",
+    "class-methods-use-this": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": "off",
     "react/function-component-definition": "off",
