@@ -15,6 +15,8 @@ import {
 
 import defaultTheme from '../../assets/styles/themes/default';
 
+import Loader from '../../components/Loader';
+
 import TransactionsService from '../../services/TransactionsService';
 
 const Dashboard: React.FC = () => {
@@ -26,14 +28,18 @@ const Dashboard: React.FC = () => {
   }
 
   const [transactions, setTransactions] = useState<transactionType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadTransactions = useCallback(async () => {
     try {
-      const { data } = await TransactionsService.listTransactions();
+      setIsLoading(true);
 
+      const { data } = await TransactionsService.listTransactions();
       setTransactions(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -43,6 +49,8 @@ const Dashboard: React.FC = () => {
 
   return (
     <Container>
+      <Loader isLoading={isLoading} />
+
       <KpisContainer>
         <KpiContainer>
           <div className="symbol-container green">

@@ -4,7 +4,7 @@ import delay from '../utils/delay';
 
 class TransactionsService {
   async listTransactions() {
-    await delay(500);
+    await delay(1000);
 
     return api.get('/transactions');
   }
