@@ -2,17 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import {
-  Overlay, Container, FormContainer, Footer,
+  Overlay, Container, FormContainer,
 } from './styles';
 
 interface ModalProps {
   title: string;
   buttonLabel: string;
-  handleCloseModal: () => void;
 }
 
 const Modal: React.FC<ModalProps> = ({
-  children, title, buttonLabel, handleCloseModal,
+  children, title,
 }) => {
   const modalDiv = document.querySelector('#modal-root');
   if (!modalDiv) {
@@ -28,19 +27,6 @@ const Modal: React.FC<ModalProps> = ({
           <FormContainer>
             {children}
           </FormContainer>
-
-          <Footer>
-            <button
-              type="submit"
-              onClick={handleCloseModal}
-              className="label-button"
-            >
-              <span>Cancelar</span>
-            </button>
-            <button type="button">
-              <span>{buttonLabel}</span>
-            </button>
-          </Footer>
         </Container>
       </Overlay>,
       modalDiv,

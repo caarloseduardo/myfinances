@@ -17,6 +17,7 @@ import defaultTheme from '../../assets/styles/themes/default';
 
 import Loader from '../../components/Loader';
 import Modal from '../../components/Modal';
+import TransactionForm from '../../components/TransactionForm';
 
 import TransactionsService from '../../services/TransactionsService';
 
@@ -58,7 +59,6 @@ const Dashboard: React.FC = () => {
         <Modal
           title="Editar transação"
           buttonLabel="Editar"
-          handleCloseModal={() => setIsEditModalVisible(false)}
         />
       )}
 
@@ -66,8 +66,12 @@ const Dashboard: React.FC = () => {
       <Modal
         title="Nova transação"
         buttonLabel="Salvar"
-        handleCloseModal={() => setIsCreateModalVisible(false)}
-      />
+      >
+        <TransactionForm
+          buttonLabel="Salvar"
+          handleCloseModal={() => setIsCreateModalVisible(false)}
+        />
+      </Modal>
       )}
 
       <KpisContainer>
