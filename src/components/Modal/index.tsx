@@ -8,9 +8,12 @@ import {
 interface ModalProps {
   title: string;
   buttonLabel: string;
+  handleCloseModal: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, title, buttonLabel }) => {
+const Modal: React.FC<ModalProps> = ({
+  children, title, buttonLabel, handleCloseModal,
+}) => {
   const modalDiv = document.querySelector('#modal-root');
   if (!modalDiv) {
     throw new Error("The element #portal wasn't found");
@@ -27,7 +30,11 @@ const Modal: React.FC<ModalProps> = ({ children, title, buttonLabel }) => {
           </FormContainer>
 
           <Footer>
-            <button type="button" className="label-button">
+            <button
+              type="submit"
+              onClick={handleCloseModal}
+              className="label-button"
+            >
               <span>Cancelar</span>
             </button>
             <button type="button">

@@ -16,6 +16,7 @@ import {
 import defaultTheme from '../../assets/styles/themes/default';
 
 import Loader from '../../components/Loader';
+import Modal from '../../components/Modal';
 
 import TransactionsService from '../../services/TransactionsService';
 
@@ -29,6 +30,8 @@ const Dashboard: React.FC = () => {
 
   const [transactions, setTransactions] = useState<transactionType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
 
   const loadTransactions = useCallback(async () => {
     try {
@@ -50,6 +53,22 @@ const Dashboard: React.FC = () => {
   return (
     <Container>
       <Loader isLoading={isLoading} />
+
+      {isEditModalVisible && (
+        <Modal
+          title="Editar transação"
+          buttonLabel="Editar"
+          handleCloseModal={() => setIsEditModalVisible(false)}
+        />
+      )}
+
+      {isCreateModalVisible && (
+      <Modal
+        title="Nova transação"
+        buttonLabel="Salvar"
+        handleCloseModal={() => setIsCreateModalVisible(false)}
+      />
+      )}
 
       <KpisContainer>
         <KpiContainer>
@@ -124,8 +143,15 @@ const Dashboard: React.FC = () => {
       </KpisContainer>
 
       <Table>
-        <button type="button">
-          <AiOutlinePlus size={20} color="#fff" />
+        <button
+          type="button"
+          onClick={() => setIsCreateModalVisible(true)}
+          className="create-transaction-button"
+        >
+          <AiOutlinePlus
+            size={20}
+            color="#fff"
+          />
         </button>
 
         <h1>Transações</h1>
@@ -170,6 +196,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 <div className="column5">
                   <HiOutlinePencilAlt
+                    onClick={() => setIsEditModalVisible(true)}
                     size={18}
                     color={defaultTheme.colors.secondary.light}
                     style={{ cursor: 'pointer' }}
