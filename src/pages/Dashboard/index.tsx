@@ -182,16 +182,25 @@ const Dashboard: React.FC = () => {
             <div className="row" key={transaction.id}>
               <div className="columns">
                 <div className="column1">
-                  <AiOutlineArrowDown
-                    size={18}
-                    color={defaultTheme.colors.semantic[transaction.amount < 0 ? 'red' : 'green']}
-                  />
+                  {transaction.amount < 0
+                    ? (
+                      <AiOutlineArrowDown
+                        size={18}
+                        color={defaultTheme.colors.semantic.red}
+                      />
+                    )
+                    : (
+                      <AiOutlineArrowUp
+                        size={18}
+                        color={defaultTheme.colors.semantic.green}
+                      />
+                    )}
                 </div>
                 <div className="column2">
                   <span>{transaction.description}</span>
                 </div>
                 <div className="column3">
-                  <span className="amount red">
+                  <span className={`amount ${transaction.amount < 0 ? 'red' : 'green'}`}>
                     {formatNumberToCurrency(transaction.amount)}
                   </span>
                 </div>
