@@ -1,9 +1,14 @@
-import React, { FormEvent, useRef } from 'react';
+import React, {
+  FormEvent, useRef,
+} from 'react';
 
 import { Form, ButtonsContainer } from './styles';
 
+import { handleAmountMask } from '../../utils/masks';
+
 import FormGroup from '../FormGroup';
 import Input from '../Input';
+import InputMask from '../InputMask';
 import Select from '../Select';
 
 interface TransactionFormProps {
@@ -22,10 +27,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   function handleSubmitForm(event: FormEvent) {
     event.preventDefault();
 
-    console.log(descriptionInputRef.current?.value);
-    console.log(amountInputRef.current?.value);
-    console.log(dateInputRef.current?.value);
-    console.log(optionSelectRef.current?.value);
+    // console.log(descriptionInputRef.current?.value);
+    // console.log(amountInputRef.current?.value);
+    // console.log(dateInputRef.current?.value);
+    // console.log(optionSelectRef.current?.value);
   }
 
   return (
@@ -38,8 +43,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       </FormGroup>
 
       <FormGroup>
-        <Input
+        <InputMask
           ref={amountInputRef}
+          maxLength={16}
+          handleChangeValue={() => handleAmountMask(amountInputRef)}
           placeholder="R$ 0,00"
         />
       </FormGroup>

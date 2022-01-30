@@ -21,6 +21,8 @@
   ],
   "rules": {
     "no-promise-executor-return": "off",
+    "no-param-reassign": "off",
+    "no-useless-escape": "off",
     "import/prefer-default-export": "off",
     "import/extensions": "off",
     "import/no-unresolved": "off",
@@ -30,6 +32,7 @@
     "react/jsx-filename-extension": "off",
     "react/function-component-definition": "off",
     "react/jsx-no-bind": "off",
-    "react/jsx-no-useless-fragment": "off"
+    "react/jsx-no-useless-fragment": "off",
+    "react/jsx-props-no-spreading": "off"
   }
 }
