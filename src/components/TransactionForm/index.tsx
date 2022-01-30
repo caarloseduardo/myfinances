@@ -1,90 +1,126 @@
-import React, {
-  FormEvent, useRef,
-} from 'react';
+import React, { FormEvent, useState, useRef } from 'react';
 
 import { Form, ButtonsContainer } from './styles';
 
 import { handleAmountMask } from '../../utils/masks';
+import formatTransactionToService from '../../utils/formatTransactionToService';
 
+import Loader from '../../components/Loader';
 import FormGroup from '../FormGroup';
 import Input from '../Input';
 import InputMask from '../InputMask';
 import Select from '../Select';
 
+import TransactionsService from '../../services/TransactionsService';
+
+import { TransactionInterface } from '../../types/transaction';
+
 interface TransactionFormProps {
   buttonLabel: string;
   handleCloseModal: () => void;
+  setTransactions: React.Dispatch<React.SetStateAction<TransactionInterface[]>>;
 }
 
 const TransactionForm: React.FC<TransactionFormProps> = ({
-  buttonLabel, handleCloseModal,
+  buttonLabel, handleCloseModal, setTransactions,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const descriptionInputRef = useRef<HTMLInputElement>(null);
   const amountInputRef = useRef<HTMLInputElement>(null);
   const dateInputRef = useRef<HTMLInputElement>(null);
   const optionSelectRef = useRef<HTMLSelectElement>(null);
 
-  function handleSubmitForm(event: FormEvent) {
+  async function handleSubmitForm(event: FormEvent) {
     event.preventDefault();
 
-    // console.log(descriptionInputRef.current?.value);
-    // console.log(amountInputRef.current?.value);
-    // console.log(dateInputRef.current?.value);
-    // console.log(optionSelectRef.current?.value);
+    if (
+      !descriptionInputRef.current
+      || !amountInputRef.current
+      || !dateInputRef.current
+      || !optionSelectRef.current
+    ) {
+      return;
+    }
+
+    const transaction = formatTransactionToService(
+      descriptionInputRef.current.value,
+      amountInputRef.current.value,
+      dateInputRef.current.value,
+      optionSelectRef.current.value,
+    );
+
+    try {
+      setIsLoading(true);
+
+      const { data } = await TransactionsService.createTransaction(transaction);
+
+      setTransactions((prevState) => [...prevState, data]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+
+      handleCloseModal();
+    }
   }
 
   return (
-    <Form>
-      <FormGroup>
-        <Input
-          ref={descriptionInputRef}
-          placeholder="Descrição"
-        />
-      </FormGroup>
+    <>
+      <Loader isLoading={isLoading} />
 
-      <FormGroup>
-        <InputMask
-          ref={amountInputRef}
-          maxLength={16}
-          placeholder="R$ 0,00"
-          handleChangeValue={() => handleAmountMask(amountInputRef)}
-        />
-      </FormGroup>
+      <Form>
+        <FormGroup>
+          <Input
+            ref={descriptionInputRef}
+            placeholder="Descrição"
+          />
+        </FormGroup>
 
-      <FormGroup>
-        <Input
-          ref={dateInputRef}
-          type="date"
-          placeholder="12/17/2021"
-        />
-      </FormGroup>
+        <FormGroup>
+          <InputMask
+            ref={amountInputRef}
+            maxLength={16}
+            placeholder="R$ 0,00"
+            handleChangeValue={() => handleAmountMask(amountInputRef)}
+          />
+        </FormGroup>
 
-      <FormGroup>
-        <Select
-          ref={optionSelectRef}
-          defaultValue="debit"
-        >
-          <option value="debit">Débito</option>
-          <option value="credit">Crédito</option>
-        </Select>
-      </FormGroup>
+        <FormGroup>
+          <Input
+            ref={dateInputRef}
+            type="date"
+            placeholder="12/17/2021"
+          />
+        </FormGroup>
 
-      <ButtonsContainer>
-        <button
-          type="button"
-          onClick={handleCloseModal}
-          className="label-button"
-        >
-          <span>Cancelar</span>
-        </button>
-        <button
-          type="submit"
-          onClick={handleSubmitForm}
-        >
-          <span>{buttonLabel}</span>
-        </button>
-      </ButtonsContainer>
-    </Form>
+        <FormGroup>
+          <Select
+            ref={optionSelectRef}
+            defaultValue="debit"
+          >
+            <option value="debit">Débito</option>
+            <option value="credit">Crédito</option>
+          </Select>
+        </FormGroup>
+
+        <ButtonsContainer>
+          <button
+            type="button"
+            onClick={handleCloseModal}
+            className="label-button"
+          >
+            <span>Cancelar</span>
+          </button>
+          <button
+            type="submit"
+            onClick={handleSubmitForm}
+          >
+            <span>{buttonLabel}</span>
+          </button>
+        </ButtonsContainer>
+      </Form>
+    </>
   );
 };
 

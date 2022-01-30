@@ -9,6 +9,8 @@ import { HiOutlinePencilAlt } from 'react-icons/hi';
 import formatNumberToCurrency from '../../utils/formatNumberToCurrency';
 import formatDate from '../../utils/formatDate';
 
+import { TransactionInterface } from '../../types/transaction';
+
 import {
   Container, KpisContainer, KpiContainer, Table,
 } from './styles';
@@ -22,14 +24,7 @@ import TransactionForm from '../../components/TransactionForm';
 import TransactionsService from '../../services/TransactionsService';
 
 const Dashboard: React.FC = () => {
-  interface transactionType {
-    amount: number;
-    date: string;
-    description: string;
-    id: string;
-  }
-
-  const [transactions, setTransactions] = useState<transactionType[]>([]);
+  const [transactions, setTransactions] = useState<TransactionInterface[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
@@ -63,15 +58,16 @@ const Dashboard: React.FC = () => {
       )}
 
       {isCreateModalVisible && (
-      <Modal
-        title="Nova transação"
-        buttonLabel="Salvar"
-      >
-        <TransactionForm
+        <Modal
+          title="Nova transação"
           buttonLabel="Salvar"
-          handleCloseModal={() => setIsCreateModalVisible(false)}
-        />
-      </Modal>
+        >
+          <TransactionForm
+            buttonLabel="Salvar"
+            handleCloseModal={() => setIsCreateModalVisible(false)}
+            setTransactions={setTransactions}
+          />
+        </Modal>
       )}
 
       <KpisContainer>
@@ -178,7 +174,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className="table-body">
-          {transactions.map((transaction: transactionType) => (
+          {transactions.map((transaction: TransactionInterface) => (
             <div className="row" key={transaction.id}>
               <div className="columns">
                 <div className="column1">
