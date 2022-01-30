@@ -46,14 +46,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         <InputMask
           ref={amountInputRef}
           maxLength={16}
-          handleChangeValue={() => handleAmountMask(amountInputRef)}
           placeholder="R$ 0,00"
+          handleChangeValue={() => handleAmountMask(amountInputRef)}
         />
       </FormGroup>
 
       <FormGroup>
         <Input
           ref={dateInputRef}
+          type="date"
           placeholder="12/17/2021"
         />
       </FormGroup>
