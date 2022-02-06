@@ -1,6 +1,6 @@
 import { api } from './utils/api';
 
-import { transactionInterface } from '../types/transaction';
+import { TransactionInterface } from '../types/transaction';
 import delay from '../utils/delay';
 
 class TransactionsService {
@@ -10,10 +10,16 @@ class TransactionsService {
     return api.get('/transactions');
   }
 
-  async createTransaction(payload: transactionInterface) {
+  async createTransaction(data: TransactionInterface) {
     await delay(1000);
 
-    return api.post('/transactions', payload);
+    return api.post('/transactions', data);
+  }
+
+  async updateTransaction(data: TransactionInterface, id: string) {
+    await delay(1000);
+
+    return api.put(`/transactions/${id}`, data);
   }
 }
 
