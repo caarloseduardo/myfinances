@@ -16,13 +16,25 @@ import TransactionsService from '../../services/TransactionsService';
 import { TransactionInterface } from '../../types/transaction';
 
 interface TransactionFormProps {
+  isUpdatingTransaction?: boolean;
+  descriptionValue?: string;
+  amountValue?: string;
+  dateValue?: string;
+  optionValue?: string;
   buttonLabel: string;
   handleCloseModal: () => void;
   setTransactions: React.Dispatch<React.SetStateAction<TransactionInterface[]>>;
 }
 
 const TransactionForm: React.FC<TransactionFormProps> = ({
-  buttonLabel, handleCloseModal, setTransactions,
+  isUpdatingTransaction,
+  descriptionValue,
+  amountValue,
+  dateValue,
+  optionValue,
+  buttonLabel,
+  handleCloseModal,
+  setTransactions,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -72,6 +84,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       <Form>
         <FormGroup>
           <Input
+            value={descriptionValue}
             ref={descriptionInputRef}
             placeholder="Descrição"
           />
@@ -79,6 +92,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
         <FormGroup>
           <InputMask
+            value={amountValue}
             ref={amountInputRef}
             maxLength={16}
             placeholder="R$ 0,00"
@@ -88,6 +102,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
         <FormGroup>
           <Input
+            value={dateValue}
             ref={dateInputRef}
             type="date"
             placeholder="12/17/2021"
@@ -97,7 +112,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         <FormGroup>
           <Select
             ref={optionSelectRef}
-            defaultValue="debit"
+            defaultValue={optionValue}
           >
             <option value="debit">Débito</option>
             <option value="credit">Crédito</option>
@@ -122,6 +137,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       </Form>
     </>
   );
+};
+
+TransactionForm.defaultProps = {
+  isUpdatingTransaction: false,
+  descriptionValue: '',
+  amountValue: '',
+  dateValue: '',
+  optionValue: '',
 };
 
 export default TransactionForm;
