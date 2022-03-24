@@ -7,7 +7,6 @@ import {
 
 interface ModalProps {
   title: string;
-  buttonLabel: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
