@@ -15,14 +15,22 @@ import TransactionsService from '../../services/TransactionsService';
 
 import { TransactionInterface } from '../../types/transaction';
 
+interface editTransactionDataInterface extends TransactionInterface {
+  option: string;
+}
+
 interface TransactionFormProps {
+  editTransactionData?: editTransactionDataInterface;
   buttonLabel: string;
   handleCloseModal: () => void;
   setTransactions: React.Dispatch<React.SetStateAction<TransactionInterface[]>>;
 }
 
 const TransactionForm: React.FC<TransactionFormProps> = ({
-  buttonLabel, handleCloseModal, setTransactions,
+  editTransactionData,
+  buttonLabel,
+  handleCloseModal,
+  setTransactions,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -53,9 +61,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     try {
       setIsLoading(true);
 
-      const { data } = await TransactionsService.createTransaction(transaction);
+      const transactionService = editTransactionData?.id
+        ? TransactionsService.updateTransaction(transaction, editTransactionData.id)
+        : TransactionsService.createTransaction(transaction);
 
-      setTransactions((prevState) => [...prevState, data]);
+      const { data } = await transactionService;
+
+      setTransactions((prevState) => [...prevState.filter((prevTransaction) => (
+        prevTransaction.id !== data.id
+      )), data]);
     } catch (error) {
       console.log(error);
     } finally {
@@ -73,6 +87,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         <FormGroup>
           <Input
             ref={descriptionInputRef}
+            defaultValue={editTransactionData?.description}
             placeholder="Descrição"
           />
         </FormGroup>
@@ -80,6 +95,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         <FormGroup>
           <InputMask
             ref={amountInputRef}
+            defaultValue={editTransactionData?.amount}
             maxLength={16}
             placeholder="R$ 0,00"
             handleChangeValue={() => handleAmountMask(amountInputRef)}
@@ -89,6 +105,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         <FormGroup>
           <Input
             ref={dateInputRef}
+            defaultValue={
+              editTransactionData
+                ? new Date(editTransactionData.date).toLocaleDateString('en-CA')
+                : ''
+            }
             type="date"
             placeholder="12/17/2021"
           />
@@ -97,7 +118,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         <FormGroup>
           <Select
             ref={optionSelectRef}
-            defaultValue="debit"
+            defaultValue={editTransactionData?.option}
           >
             <option value="debit">Débito</option>
             <option value="credit">Crédito</option>

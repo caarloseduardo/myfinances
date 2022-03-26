@@ -108,7 +108,7 @@ export const Table = styled.div`
     border-bottom: 1px solid #fff;
 
     span {
-      font-size: 0.875rem;
+      font-size: 1rem;
       color: ${({ theme }) => theme.colors.fonts.dark}
     }
   }
@@ -126,7 +126,7 @@ export const Table = styled.div`
     }
 
     span {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       font-weight: 300;
     }
 

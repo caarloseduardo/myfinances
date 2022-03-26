@@ -23,8 +23,13 @@ import TransactionForm from '../../components/TransactionForm';
 
 import TransactionsService from '../../services/TransactionsService';
 
+interface editTransactionDataInterface extends TransactionInterface {
+  option: string;
+}
+
 const Dashboard: React.FC = () => {
   const [transactions, setTransactions] = useState<TransactionInterface[]>([]);
+  const [editData, setEditData] = useState<editTransactionDataInterface>();
   const [isLoading, setIsLoading] = useState(true);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
@@ -42,6 +47,36 @@ const Dashboard: React.FC = () => {
     }
   }, []);
 
+  const handleOpenEditModal = useCallback((transactionData: TransactionInterface) => {
+    const formattedTransactionData = {
+      ...transactionData,
+      option: transactionData.amount > 0 ? 'debit' : 'credit',
+    };
+    setEditData(formattedTransactionData);
+
+    setIsEditModalVisible(true);
+  }, []);
+
+  const handleDeleteTransaction = useCallback(async (transactionId: string | undefined) => {
+    try {
+      setIsLoading(true);
+
+      if (!transactionId) {
+        throw new Error('Id is required');
+      }
+
+      await TransactionsService.deleteTransaction(transactionId);
+
+      setTransactions((prevState) => prevState.filter((prevTransaction) => (
+        prevTransaction.id !== transactionId
+      )));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     loadTransactions();
   }, []);
@@ -50,21 +85,26 @@ const Dashboard: React.FC = () => {
     <Container>
       <Loader isLoading={isLoading} />
 
-      {isEditModalVisible && (
-        <Modal
-          title="Editar transação"
-          buttonLabel="Editar"
-        />
-      )}
-
       {isCreateModalVisible && (
         <Modal
           title="Nova transação"
-          buttonLabel="Salvar"
         >
           <TransactionForm
             buttonLabel="Salvar"
             handleCloseModal={() => setIsCreateModalVisible(false)}
+            setTransactions={setTransactions}
+          />
+        </Modal>
+      )}
+
+      {isEditModalVisible && (
+        <Modal
+          title="Editar transação"
+        >
+          <TransactionForm
+            buttonLabel="Editar"
+            editTransactionData={editData}
+            handleCloseModal={() => setIsEditModalVisible(false)}
             setTransactions={setTransactions}
           />
         </Modal>
@@ -205,7 +245,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 <div className="column5">
                   <HiOutlinePencilAlt
-                    onClick={() => setIsEditModalVisible(true)}
+                    onClick={() => handleOpenEditModal(transaction)}
                     size={18}
                     color={defaultTheme.colors.secondary.light}
                     style={{ cursor: 'pointer' }}
@@ -213,6 +253,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 <div className="column6">
                   <BiTrashAlt
+                    onClick={() => handleDeleteTransaction(transaction.id)}
                     size={18}
                     color={defaultTheme.colors.secondary.light}
                     style={{ cursor: 'pointer' }}
