@@ -53,7 +53,28 @@ const Dashboard: React.FC = () => {
       option: transactionData.amount > 0 ? 'debit' : 'credit',
     };
     setEditData(formattedTransactionData);
+
     setIsEditModalVisible(true);
+  }, []);
+
+  const handleDeleteTransaction = useCallback(async (transactionId: string | undefined) => {
+    try {
+      setIsLoading(true);
+
+      if (!transactionId) {
+        throw new Error('Id is required');
+      }
+
+      await TransactionsService.deleteTransaction(transactionId);
+
+      setTransactions((prevState) => prevState.filter((prevTransaction) => (
+        prevTransaction.id !== transactionId
+      )));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -232,6 +253,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 <div className="column6">
                   <BiTrashAlt
+                    onClick={() => handleDeleteTransaction(transaction.id)}
                     size={18}
                     color={defaultTheme.colors.secondary.light}
                     style={{ cursor: 'pointer' }}

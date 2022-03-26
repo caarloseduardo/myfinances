@@ -21,6 +21,12 @@ class TransactionsService {
 
     return api.put(`/transactions/${id}`, data);
   }
+
+  async deleteTransaction(id: string) {
+    await delay(1000);
+
+    return api.delete(`/transactions/${id}`);
+  }
 }
 
 export default new TransactionsService();
