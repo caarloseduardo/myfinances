@@ -10,11 +10,11 @@ export default function formatTransactionToService(
   const [splittedAmount] = amount.split(',');
   const amountNumbers = splittedAmount.replace(/\D/g, '');
 
-  if (option === 'credit') {
+  if (option === 'debit') {
     amountWithSignal = `-${amountNumbers}`;
   }
 
-  if (option === 'debit') {
+  if (option === 'credit') {
     amountWithSignal = amountNumbers;
   }
 
