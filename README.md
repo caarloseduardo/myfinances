@@ -1,4 +1,6 @@
-![header](.github/logo.png)
+<center>
+  <img src=".github/logo.png" alt="Logo" />
+</center>
 
 <br>
 
