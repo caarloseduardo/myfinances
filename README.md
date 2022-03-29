@@ -1,6 +1,4 @@
-<h1 align="center">
-  <img src=".github/logo.png" alt="Logo" />
-</h1>
+![header](.github/logo.png)
 
 <br>
 
@@ -11,19 +9,13 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [React](https://reactjs.org)
 - [TypeScript](https://www.typescriptlang.org/)
 
-<br>
-
 ## 💻 Projeto
 
 O MyFinances é um app para controle de finanças.
 
-<br>
-
 ## 🔖 Layout
 
 <img src=".github/layout.png" alt="Layout" />
-
-<br>
 
 ## 🚀 Como executar
 
