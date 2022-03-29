@@ -4,6 +4,7 @@ import { Form, ButtonsContainer } from './styles';
 
 import { handleAmountMask } from '../../utils/masks';
 import formatTransactionToService from '../../utils/formatTransactionToService';
+import formatNumberToCurrency from '../../utils/formatNumberToCurrency';
 
 import Loader from '../../components/Loader';
 import FormGroup from '../FormGroup';
@@ -95,7 +96,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         <FormGroup>
           <InputMask
             ref={amountInputRef}
-            defaultValue={editTransactionData?.amount}
+            defaultValue={formatNumberToCurrency(
+              editTransactionData?.amount
+                ? editTransactionData?.amount
+                : 0,
+            )}
             maxLength={16}
             placeholder="R$ 0,00"
             handleChangeValue={() => handleAmountMask(amountInputRef)}
